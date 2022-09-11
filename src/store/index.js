@@ -1,13 +1,32 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
+// VUEX 持久化状态插件：vuex-persistedstate
+/* vue2下载 3.2.1版本，引入，在调用： plugins: [createPersistedState({})],
+配置项：key默认是vuex；
+        storage：默认值是本地存储
+        reducer:指定持久化哪些数据，return一个对象，对象就作为存储的value，
+        默认传入参数state
+*/
 
 export default new Vuex.Store({
+  plugins: [
+    createPersistedState({
+      key: 'HEIMA_TOUTIAO',
+      reducer({ tokenObj }) {
+        return { tokenObj }
+      }
+    })
+  ],
   state: {
     tokenObj: {}
   },
-  getters: {},
+  getters: {
+    isLogin(state) {
+      return !state.tokenObj.token // false
+    }
+  },
   mutations: {
     SET_TOKEN(state, token) {
       state.tokenObj = token

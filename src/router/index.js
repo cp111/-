@@ -6,6 +6,29 @@ const routes = [
   {
     path: '/login',
     component: () => import('@/views/login') // 路由懒加载，使用倒了路由界面再去请求
+  },
+  {
+    path: '/',
+    component: () => import('@/views/layout'),
+    redirect: '/ ',
+    children: [
+      {
+        path: '/ ',
+        component: () => import('@/views/Home')
+      },
+      {
+        path: '/video',
+        component: () => import(/* webpackChunkName:"base" */ '@/views/Video')
+      },
+      {
+        path: '/my',
+        component: () => import(/* webpackChunkName:"base" */ '@/views/My')
+      },
+      {
+        path: '/qa',
+        component: () => import('@/views/QA')
+      }
+    ]
   }
 ]
 

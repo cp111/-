@@ -74,9 +74,9 @@ export default {
       })
       try {
         const { data } = await login(this.mobile, this.code)
-        console.log(data)
+        // console.log(data)
         this.SET_TOKEN(data.data)
-        this.$router.push('/profile')
+        this.$router.push('/my')
         this.$toast.success('登陆成功')
       } catch (error) {
         // error： 1.js的报错    2. axios封装的error对象
