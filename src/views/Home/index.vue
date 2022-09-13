@@ -12,22 +12,38 @@
         <!-- 文章详情组件 -->
         <art-list :id="item.id"></art-list>
       </van-tab>
-      <span class="toutiao toutiao-gengduo"></span>
+      <span class="toutiao toutiao-gengduo" @click="isShow = true"></span>
     </van-tabs>
+    <!-- 弹出层 -->
+    <van-popup
+      closeable
+      close-icon-position="top-left"
+      v-model="isShow"
+      position="bottom"
+      :style="{ height: '100%' }"
+    >
+      <ChannelEdit
+      @change-active=";[(isShow = false),(active = $event)]"
+      :myChannels="getChannelList"
+      ></ChannelEdit>
+    </van-popup>
   </div>
 </template>
 
 <script>
+import ChannelEdit from '@/views/Home/components/ChannelEdit.vue'
 import ArtList from './components/ArtList.vue'
 import { getChannelAPI } from '@/api'
 export default {
   components: {
-    ArtList
+    ArtList,
+    ChannelEdit
   },
   data() {
     return {
       active: 0,
-      getChannelList: []
+      getChannelList: [],
+      isShow: false
     }
   },
   created() {

@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import dayjs from '@/utils/dayjs'
 export default {
   props: {
     article: {
@@ -42,7 +43,7 @@ export default {
     label() {
       // 把要用到的作者，评论，时间这三个先解构出来
       const { aut_name, comm_count, pubdate } = this.article
-      return `${aut_name} ${comm_count}评论 ${pubdate}`
+      return `${aut_name} ${comm_count}评论 ${dayjs(pubdate).fromNow()}`
     }
   }
 }
