@@ -22,18 +22,23 @@
       position="bottom"
       :style="{ height: '100%' }"
     >
+      <!-- $event是子组件传过来的那个index -->
       <ChannelEdit
-      @change-active=";[(isShow = false),(active = $event)]"
-      :myChannels="getChannelList"
+      v-if="isShow"
+        @change-active=";[(isShow = false), (active = $event)]"
+        :myChannels="getChannelList"
+        @delChannel="delChannel"
+        @addChannel="addChannel"
       ></ChannelEdit>
     </van-popup>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 import ChannelEdit from '@/views/Home/components/ChannelEdit.vue'
 import ArtList from './components/ArtList.vue'
-import { getChannelAPI } from '@/api'
+import { getChannelAPI, delChannelAPI, addChannelAPI } from '@/api/channel'
 export default {
   components: {
     ArtList,
@@ -47,11 +52,27 @@ export default {
     }
   },
   created() {
-    this.getChannel()
+    this.initChannles()
+  },
+  computed: {
+    ...mapGetters(['isLogin'])
   },
   /*  ?? 类似于 || 常用语语句
      ?. 可选链操作符， ？ 前面是undefined，那么不会往后面取值 */
   methods: {
+    ...mapMutations(['SET_MY_CHANNELS']),
+    initChannles() {
+      if (!this.isLogin) {
+        this.getChannel()
+      } else {
+        const myChannels = this.$store.state.myChannels
+        if (myChannels.length === 0) {
+          this.getChannel()
+        } else {
+          this.getChannelList = myChannels
+        }
+      }
+    },
     async getChannel() {
       try {
         const { data } = await getChannelAPI()
@@ -63,6 +84,45 @@ export default {
         } else {
           const status = error.response.status
           status === 507 && this.$toast.fail('服务端异常，请刷新')
+        }
+      }
+    },
+
+    async delChannel(id) {
+      try {
+        // newChannels是删除后最新的
+        const newChannels = this.getChannelList.filter((item) => item.id !== id)
+        if (!this.isLogin) {
+          await delChannelAPI(id)
+        } else {
+          this.SET_MY_CHANNELS(newChannels)
+        }
+
+        this.getChannelList = newChannels
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          this.$toast.fail('请登录再删除')
+        } else {
+          throw error
+        }
+      }
+    },
+    async addChannel(value) {
+      try {
+        if (!this.isLogin) {
+          await addChannelAPI(value.id, this.getChannelList.length)
+        } else {
+          // 扩展运算符把就的值展开，再跟新的值合并
+          this.SET_MY_CHANNELS([...this.getChannelList, value])
+        }
+        // 这个vaule是新的添加的频道
+        this.getChannelList.push(value)
+        this.$toast.success('添加成功')
+      } catch (error) {
+        if (error.response && error.response.statys === 401) {
+          this.$toast.fail('请登录再添加')
+        } else {
+          throw error
         }
       }
     }
