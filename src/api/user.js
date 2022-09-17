@@ -36,3 +36,38 @@ export const getUserInfoAPI = () => {
     // headers: { Authorization: `Bearer ${store.state.tokenObj.token}` }
   })
 }
+/**
+ * 上传图片
+ * @param {*} file 裁剪后的图片的file对象
+ * @returns
+ */
+export const uploadPhoto = (file) => {
+  const fm = new FormData()
+  fm.append('photo', file)
+  return request({
+    url: '/v1_0/user/photo',
+    method: 'PATCH',
+    data: fm
+  })
+}
+/**
+ * 获取用户个人资料
+ * @returns promise
+ */
+export const getUserAPI = () => {
+  return request({
+    url: '/v1_0/user/profile'
+  })
+}
+/**
+ * 编辑资料
+ * @param {*}
+ * @returns
+ */
+export const updateUserProfileAPI = (data) => {
+  return request({
+    url: '/v1_0/user/profile',
+    method: 'PATCH',
+    data
+  })
+}

@@ -19,7 +19,7 @@
           </van-col>
           <van-col span="7"></van-col>
           <van-col span="5">
-            <van-button size="mini" round class="edit-btn">编辑按钮</van-button>
+            <van-button @click="$router.push('/user')" size="mini" round class="edit-btn">编辑按钮</van-button>
           </van-col>
         </van-row>
         <van-row>
