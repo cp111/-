@@ -32,11 +32,17 @@ const routes = [
   },
   {
     path: '/search',
-    component: () => import(/* webpackChunkName:"search" */'@/views/Search')
+    component: () => import(/* webpackChunkName:"search" */ '@/views/Search')
   },
   {
     path: '/user',
-    component: () => import(/* webpackChunkName:"user" */'@/views/User')
+    component: () => import(/* webpackChunkName:"user" */ '@/views/User')
+  },
+  {
+    path: '/article/:articleId',
+    component: () =>
+      import(/* webpackChunkName:"articledetials" */ '@/views/article'),
+    props: true // 开启路由解耦
   }
 ]
 

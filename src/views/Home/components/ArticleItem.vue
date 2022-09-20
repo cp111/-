@@ -1,11 +1,13 @@
 <template>
   <div>
     <van-cell
+      :to="`/article/` + article.art_id"
       v-if="article.cover.type === 0"
       :title="article.title"
       :label="label"
     ></van-cell>
     <van-cell
+      :to="`/article/` + article.art_id"
       :label="label"
       v-else-if="article.cover.type === 1"
       :title="article.title"
@@ -14,7 +16,7 @@
         <van-image width="80" height="80" :src="article.cover.images[0]" />
       </template>
     </van-cell>
-    <van-cell v-else :title="article.title">
+    <van-cell :to="`/article/` + article.art_id" v-else :title="article.title">
       <template #label>
         <van-image
           v-for="(item, index) in article.cover.images"
@@ -23,7 +25,7 @@
           height="80"
           :src="item"
         />
-        <p>{{label}}</p>
+        <p>{{ label }}</p>
       </template>
     </van-cell>
   </div>
